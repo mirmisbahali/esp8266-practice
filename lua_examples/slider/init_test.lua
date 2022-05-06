@@ -29,11 +29,6 @@ srv:listen(80, function(conn)
         
         if #find ~= 0 then            
             args = string.sub(request, find[2]+2, #request)
-            -- seperator = {string.find(args, "=")}
-            -- servoName = string.sub(args, 0, seperator[1]-1)
-            -- secondArg = string.sub(args, seperator[1]+1, )
-            -- print("secArg" .. secondArg .. "ishere")
-            -- servoPos = tonumber(secondArg)
             
             local servo = {}
             if (args ~= nil) then
@@ -41,17 +36,27 @@ srv:listen(80, function(conn)
                 for k, v in string.gmatch(args, "(%w+)=(%w+)") do
                     if string.match(k, "Servo") then
                         servo.name = k
-                        servo.pos = v
+                        servo.pos = tonumber(v)
                     end
                 end
             end
 
+            local clawServoPin = 1
+            local leftServoPin = 2
+            local rightServoPin = 3
+            local baseServoPin = 4
 
+            pwm.setup(clawServoPin, 50, 20)
+            pwm.setup(leftServoPin, 50, 20)
+            pwm.setup(rightServoPin, 50, 20)
+            pwm.setup(baseServoPin, 50, 20)
 
-            local clawPin = 1
-            pwm.setup(clawPin, 50, 20)
-            pwm.start(clawPin)
+            pwm.start(clawServoPin)
+            pwm.start(leftServoPin)
+            pwm.start(rightServoPin)
+            pwm.start(baseServoPin)
             
+            local 
             function setServoPos(pin, pos) 
                 dc = ((100/180)*pos) + 20
                 print("Duty Cycle = " .. dc)
@@ -60,8 +65,13 @@ srv:listen(80, function(conn)
             end
 
             if servo.name == "clawServo" then
-                setServoPos(clawPin, servo.pos)
-            end
+                setServoPos(clawServoPin, servo.pos)
+            else if servo.name == "leftServo" then
+                setServoPos(leftServoPin, servo.pos)
+            else if servo.name == "rightServo" then
+                setServoPos(rightServoPin, servo.pin)
+            else if servo.name = "baseServo" then
+                setServoPos(baseServoPin, servo.pin)
 
 
             

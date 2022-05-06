@@ -26,20 +26,47 @@ srv:listen(80, function(conn)
 
         
         find = {string.find(request, 'slider')}
-        if #find ~= 0 then
-            print(find[1], find[2])
+        
+        if #find ~= 0 then            
             args = string.sub(request, find[2]+2, #request)
-            equals = {string.find(args, "=")}
-            servoName = string.sub(args, 0, equals[1]-1)
-            servoPos = string.sub(args, equals[1]+1, #args)
-            print("ServoName=", servoName)
-            print("servoPos=", servoPos)
+            -- seperator = {string.find(args, "=")}
+            -- servoName = string.sub(args, 0, seperator[1]-1)
+            -- secondArg = string.sub(args, seperator[1]+1, )
+            -- print("secArg" .. secondArg .. "ishere")
+            -- servoPos = tonumber(secondArg)
+            
+            local servo = {}
+            if (args ~= nil) then
+                local n = 0
+                for k, v in string.gmatch(args, "(%w+)=(%w+)") do
+                    if string.match(k, "Servo") then
+                        servo.name = k
+                        servo.pos = v
+                    end
+                end
+            end
+
+
+
+            local clawPin = 1
+            pwm.setup(clawPin, 50, 20)
+            pwm.start(clawPin)
+            
+            function setServoPos(pin, pos) 
+                dc = ((100/180)*pos) + 20
+                print("Duty Cycle = " .. dc)
+                pwm.setduty(pin, dc)
+                return
+            end
+
+            if servo.name == "clawServo" then
+                setServoPos(clawPin, servo.pos)
+            end
+
+
+            
             
         end
-        
-
-        
-
         
         client:send([[
             <!DOCTYPE html>

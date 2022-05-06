@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slider</title>
+</head>
+<body>
+    <input onchange="slider(this)" type="range" name="clawServo" id="clawServo" min="0" max="180">
+    <input onchange="slider(this)" type="range" name="leftServo" id="leftServo" min="0" max="180">
+    <input onchange="slider(this)" type="range" name="rightSerervo" id="rightSerervo" min="0" max="180">
+    <input onchange="slider(this)" type="range" name="baseServo" id="baseServo" min="0" max="180">
+    <script>
+       function slider(el) {
+           console.log(`Name: ${el.name}`)
+           console.log(`Value: ${el.value}`)
+           const xhttp = new XMLHttpRequest();
+           xhttp.onload = function() {
+            console.log(el);
+           }
+           xhttp.open("GET", `/${el.name}?value=${el.value}`, true);
+           xhttp.send();
+       }
+    </script>
+</body>
+</html>

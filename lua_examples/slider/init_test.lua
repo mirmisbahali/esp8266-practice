@@ -28,8 +28,12 @@ srv:listen(80, function(conn)
         find = {string.find(request, 'slider')}
         if #find ~= 0 then
             print(find[1], find[2])
-            value = string.sub(request, find[2]+2, #request)
-            print("value=", value)
+            args = string.sub(request, find[2]+2, #request)
+            equals = {string.find(args, "=")}
+            servoName = string.sub(args, 0, equals[1]-1)
+            servoPos = string.sub(args, equals[1]+1, #args)
+            print("ServoName=", servoName)
+            print("servoPos=", servoPos)
             
         end
         

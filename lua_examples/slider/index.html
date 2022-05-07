@@ -59,7 +59,7 @@
       xhttp.onload = function () {
         console.log(el);
       }
-      xhttp.open("GET", `/${el.name}?value=${el.value}`, true);
+      xhttp.open("GET", `/slider?name=${el.name}&value=${el.value}`, true);
       xhttp.send();
     }
   </script>
